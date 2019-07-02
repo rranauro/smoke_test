@@ -7,11 +7,11 @@ Install Node.js on your machine [Install](https://nodejs.org/en/download/)
 ## Running
 The `smoke_test` app requires the CLIENT_ID and CLIENT_SECRET environment variables to be set. You can either set them in your environment and call the app using:
 
-  > node index
+  $ node index
   
 Or you can specify them at run time:
 
-  > CLIENT_ID=abc CLIENT_SECRET=xyz node index
+  $ CLIENT_ID=abc CLIENT_SECRET=xyz node index
   
 ## Example Session
 
