@@ -38,12 +38,14 @@ Browsing: categories
   'HEOR & RWE',
   'Data Sciences',
   'Biology' ]
+
 Scientist.com API> Consulting
 Browsing: categories
 [ 'Clinical Consulting',
   'Pre-Clinical Consulting',
   'Commercial Consulting',
   'Discovery Consulting' ]
+
 Scientist.com API> up
 Browsing: categories
 [ 'Consulting',
