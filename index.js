@@ -44,7 +44,7 @@ const handler = function(request) {
 	let commands = [{
 		name: 'Categories',
 		slug: 'categories',
-		url : 'api/categories.json',
+		url : _.template('api/categories.json'),
 		ref: 'category_refs'
 	},{
 		name: 'Providers',
@@ -71,7 +71,8 @@ const handler = function(request) {
 		}
 		return ctx;
 	};
-		
+	
+	console.log(printCommands( commands ) );
 	return function(cmd, local, fname, callback) {
 		cmd = (cmd || '').toLowerCase().trim();
 		let command;
@@ -79,8 +80,15 @@ const handler = function(request) {
 		
 		if (cmd === 'up' && context.length) {
 			context.pop();
-		} else if (cmd !== 'up' && cmd !== 'more'){
+		} else if (cmd !== 'up' && cmd !== 'more' && cmd !== 'help'){
 			context.push( cmd );
+		} else if (cmd === 'help') {
+			
+			if (!context.length) {
+				return callback(null, {message: 'Type "Category" or "Providers"'})
+			}
+			
+			
 		}
 		
 		command = findCommands( commands, context );
