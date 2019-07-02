@@ -41,8 +41,7 @@ let request = (function(CLIENT_ID, CLIENT_SECRET) {
 }(process.env.CLIENT_ID, process.env.CLIENT_SECRET));
 
 // method for "categories.json" and "providers.json" endpoints.
-// since each endpoint can have its own business logic, probably need 1 handler per
-// endpoint.
+// since each endpoint can have its own business logic, probably need custom handler per endpoint.
 const handler = function(request) {
 	let commands = [{
 		name: 'Categories',
@@ -90,7 +89,6 @@ const handler = function(request) {
 			if (!context.length) {
 				return callback(null, {message: 'Type "Category" or "Providers"'})
 			}
-			
 		}
 		
 		command = findCommands( commands, context );
