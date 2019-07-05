@@ -1,5 +1,5 @@
 const repl = require('repl');
-const _ = require('base-utils')._;
+const _ = require('underscore')._;
 
 let request = (function(CLIENT_ID, CLIENT_SECRET) {
 	const protocol = 'https://';
