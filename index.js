@@ -2,8 +2,8 @@ const repl = require('repl');
 const _ = require('underscore')._;
 
 let request = (function(CLIENT_ID, CLIENT_SECRET) {
-	const protocol = 'https://';
-	const urlRoot = 'app.scientist.com';
+	const protocol = 'http://';
+	const urlRoot = 'dev.scientist.com:3000';
 	const _request = require('request');
 	let urlPrefix;
 	let _options = {headers: {}};
@@ -46,7 +46,8 @@ const handler = function(request) {
 	let commands = [{
 		name: 'Categories',
 		slug: 'categories',
-		url : _.template('api/categories.json'),
+		url : _.template('hello/world'),
+//		url : _.template('api/categories.json'),
 		ref: 'category_refs'
 	},{
 		name: 'Providers',
@@ -60,14 +61,14 @@ const handler = function(request) {
 	}];
 	let context = [];
 	let printCommands = function(ctx) {
-		return ctx.map(function(row) {
+		return (ctx || []).map(function(row) {
 			return row.name;
 		});
 	};
 	let findCommands = function(ctx, path) {
 
-		if (path.length) {
-			return findCommands( _.find(ctx.ref ? ctx[ctx.ref] : (ctx.children || ctx), function(child) {
+		if (!!path.length) {
+			return findCommands( _.find((ctx && ctx.ref) ? ctx[ctx.ref] : (ctx.children || ctx), function(child) {
 				return child.name.toLowerCase() === path[0].toLowerCase();
 			} ), path.slice(1) );
 		}
@@ -92,7 +93,7 @@ const handler = function(request) {
 		}
 		
 		command = findCommands( commands, context );
-		if (command.name === 'Providers') {
+		if (command && command.name === 'Providers') {
 			
 			// make sure we have integers
 			command.total = parseInt(command.total || -1, 10);
@@ -106,7 +107,8 @@ const handler = function(request) {
 			command.page = command.page < (command.per_page * command.page) 
 			? command.total / command.per_page 
 			: command.page;	
-		}
+		} 
+		
 		
 		// command.url() is function that take an object for substituting values.
 		url = command && _.isFunction(command.url) && command.url({
@@ -117,6 +119,14 @@ const handler = function(request) {
 		
 		if (url) {
 			request.GET(url, function(err, response) {
+				
+				if (~process.argv.indexOf('--show')) {
+					console.log(require('util').inspect(response, null, 4))
+				}
+
+				if (response && response.statusCode !== 200) {
+					throw new Error(response.body.message);
+				}
 				_.extend(command, response.body);
 				
 				if (cmd === 'providers') {
